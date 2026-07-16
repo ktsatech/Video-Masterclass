@@ -135,7 +135,19 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        return { ...defaultConfig, ...parsed };
+        const migrated = { ...defaultConfig, ...parsed };
+        
+        // Backward compatibility migration for keys and service IDs
+        if (parsed.publicKey && !parsed.publicKey1) {
+          migrated.publicKey1 = parsed.publicKey;
+        }
+        if (parsed.publicKey && !parsed.publicKey2) {
+          migrated.publicKey2 = parsed.publicKey;
+        }
+        if (parsed.serviceId && !parsed.serviceId1) {
+          migrated.serviceId1 = parsed.serviceId;
+        }
+        return migrated;
       } catch (e) {
         return defaultConfig;
       }
@@ -248,7 +260,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         emailConfig.serviceId2,
         emailConfig.templateIdStudent,
         templateParams,
-        emailConfig.publicKey2
+        { publicKey: emailConfig.publicKey2 }
       ).then(
         (response) => {
           console.log('SUCCESS! Real student email sent via Service 2 (King Elidex).', response.status, response.text);
@@ -272,7 +284,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         emailConfig.serviceId1,
         emailConfig.templateIdStudent,
         templateParams,
-        emailConfig.publicKey1
+        { publicKey: emailConfig.publicKey1 }
       ).then(
         (response) => {
           console.log('SUCCESS! Real student email sent via Service 1 (Ktesatech).', response.status, response.text);
@@ -311,7 +323,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         emailConfig.serviceId1,
         emailConfig.templateIdAdmin,
         templateParams,
-        emailConfig.publicKey1
+        { publicKey: emailConfig.publicKey1 }
       ).then(
         (response) => {
           console.log('SUCCESS! Real admin alert email sent to ktesatech.reception.co@gmail.com via Service 1.', response.status, response.text);
@@ -337,7 +349,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         emailConfig.serviceId2,
         emailConfig.templateIdAdmin,
         templateParams,
-        emailConfig.publicKey2
+        { publicKey: emailConfig.publicKey2 }
       ).then(
         (response) => {
           console.log('SUCCESS! Real admin alert email sent to kingelidexaivideoeditor@gmail.com via Service 2.', response.status, response.text);
@@ -365,7 +377,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         elijahServiceId,
         emailConfig.templateIdAdmin,
         templateParams,
-        elijahPublicKey
+        { publicKey: elijahPublicKey }
       ).then(
         (response) => {
           console.log('SUCCESS! Real admin alert email sent to elijahadeyinka75@gmail.com.', response.status, response.text);

@@ -274,7 +274,7 @@ export default function StudentStatus({ initialSearchEmail = '', onNavigateToPor
                     <form onSubmit={handleTrainingReceiptSubmit} className="flex flex-col gap-4">
                       
                       {/* Drag & drop screenshot */}
-                      <div className="border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center bg-slate-50 hover:bg-slate-100/50 transition-colors flex flex-col items-center justify-center relative min-h-[160px]">
+                      <div className="border-2 border-slate-200 rounded-2xl p-6 text-center bg-slate-50 hover:bg-slate-100/50 transition-colors flex flex-col items-center justify-center relative min-h-[160px]">
                         <input
                           type="file"
                           accept="image/*"

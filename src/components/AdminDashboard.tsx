@@ -1166,7 +1166,7 @@ export default function AdminDashboard() {
                         </a>
                       </div>
                     ) : (
-                      <div className="aspect-[4/3] rounded-lg border border-dashed border-slate-200 bg-white flex items-center justify-center text-slate-400 text-xs font-semibold">
+                      <div className="aspect-[4/3] rounded-lg border border-slate-200 bg-white flex items-center justify-center text-slate-400 text-xs font-semibold">
                         No receipt uploaded
                       </div>
                     )}
@@ -1188,7 +1188,7 @@ export default function AdminDashboard() {
                         </a>
                       </div>
                     ) : (
-                      <div className="aspect-[4/3] rounded-lg border border-dashed border-slate-200 bg-white flex items-center justify-center text-slate-400 text-xs font-semibold">
+                      <div className="aspect-[4/3] rounded-lg border border-slate-200 bg-white flex items-center justify-center text-slate-400 text-xs font-semibold">
                         No tuition receipt uploaded
                       </div>
                     )}

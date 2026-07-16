@@ -16,7 +16,7 @@ export default function Navbar({ currentPath, navigate }: NavbarProps) {
     { name: 'Home', path: '#/', icon: GraduationCap },
     { name: 'Check Status', path: '#/status', icon: UserCheck },
     { name: 'Student Portal', path: '#/portal', icon: Award },
-    { name: 'Admin Panel', path: '#/admin', icon: ShieldAlert },
+    ...(currentAdmin ? [{ name: 'Admin Panel', path: '#/admin', icon: ShieldAlert }] : []),
   ];
 
   const handleNavClick = (path: string) => {

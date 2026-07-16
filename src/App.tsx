@@ -11,9 +11,9 @@ import KingElidexLogo from './components/KingElidexLogo';
 import { Sparkles, X, User, Shield, Info, ArrowRight } from 'lucide-react';
 
 function AppContent() {
+  const { currentAdmin } = useApp();
   const [currentPath, setCurrentPath] = useState(window.location.hash || '#/');
   const [initialSearchEmail, setInitialSearchEmail] = useState('');
-  const [showSandboxHint, setShowSandboxHint] = useState(true);
 
   // Sync hash state with router changes
   useEffect(() => {
@@ -146,7 +146,9 @@ function AppContent() {
                 <button onClick={() => navigate('#/')} className="hover:text-white text-left transition-colors">Home Landing</button>
                 <button onClick={() => navigate('#/status')} className="hover:text-white text-left transition-colors">Queue Status Checker</button>
                 <button onClick={() => navigate('#/portal')} className="hover:text-white text-left transition-colors">Classroom Portal</button>
-                <button onClick={() => navigate('#/admin')} className="hover:text-white text-left transition-colors">Admin Terminal</button>
+                {currentAdmin && (
+                  <button onClick={() => navigate('#/admin')} className="hover:text-white text-left transition-colors">Admin Terminal</button>
+                )}
               </div>
             </div>
 
@@ -169,50 +171,6 @@ function AppContent() {
           </div>
         </div>
       </footer>
-
-      {/* DISMISSIBLE TESTING ASSISTANT SANDBOX HUD */}
-      {showSandboxHint && (
-        <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-md bg-slate-900 border border-blue-900/50 rounded-2xl p-4 text-white shadow-2xl z-40 animate-fadeIn flex gap-3">
-          <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center shrink-0 shadow">
-            <Sparkles className="w-5 h-5 text-blue-100" />
-          </div>
-          <div className="flex-1">
-            <div className="flex justify-between items-start">
-              <h5 className="font-black text-xs uppercase tracking-wide text-blue-400 flex items-center gap-1.5">
-                <Info className="w-3.5 h-3.5" /> Interactive Sandbox HUD
-              </h5>
-              <button 
-                onClick={() => setShowSandboxHint(false)}
-                className="text-slate-400 hover:text-white p-0.5 rounded"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            </div>
-            <p className="text-[10px] text-slate-300 font-medium leading-relaxed mt-1">
-              Easily evaluate the platform's multi-step payment pipeline:
-            </p>
-            <div className="flex flex-col gap-1.5 mt-2.5">
-              <button
-                onClick={() => navigate('#/admin')}
-                className="w-full bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white font-black py-1.5 px-3 rounded-lg text-[9px] flex items-center justify-between transition-colors border border-slate-700"
-              >
-                <span className="flex items-center gap-1"><Shield className="w-3 h-3 text-emerald-400 shrink-0" /> Open Admin Panel</span>
-                <ArrowRight className="w-3 h-3" />
-              </button>
-              <button
-                onClick={() => {
-                  window.location.hash = '#/portal';
-                  setCurrentPath('#/portal');
-                }}
-                className="w-full bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white font-black py-1.5 px-3 rounded-lg text-[9px] flex items-center justify-between transition-colors border border-slate-700"
-              >
-                <span className="flex items-center gap-1"><User className="w-3 h-3 text-blue-400 shrink-0" /> Enter Student Classroom</span>
-                <ArrowRight className="w-3 h-3" />
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
     </div>
   );

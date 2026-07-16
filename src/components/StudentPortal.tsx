@@ -215,7 +215,7 @@ export default function StudentPortal() {
                     </div>
                   ) : (
                     <form onSubmit={handleSettleTuition} className="flex flex-col gap-3">
-                      <div className="border border-dashed border-slate-200 rounded-xl p-4 text-center bg-slate-50 relative">
+                      <div className="border border-slate-200 rounded-xl p-4 text-center bg-slate-50 relative">
                         <input
                           type="file"
                           accept="image/*"

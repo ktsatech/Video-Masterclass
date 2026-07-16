@@ -305,7 +305,7 @@ export default function RegistrationForm({ onSuccess }: RegistrationFormProps) {
           </div>
 
           {/* Interactive Uploader box */}
-          <div className="border-2 border-dashed border-slate-200 rounded-3xl p-8 text-center bg-slate-50/50 hover:bg-slate-50 transition-colors flex flex-col items-center justify-center relative group min-h-[220px]">
+          <div className="border-2 border-slate-200 rounded-3xl p-8 text-center bg-slate-50/50 hover:bg-slate-50 transition-colors flex flex-col items-center justify-center relative group min-h-[220px]">
             <input
               type="file"
               accept="image/*"
