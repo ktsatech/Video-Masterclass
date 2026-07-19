@@ -1,6 +1,6 @@
 {
   "name": "King Elidex Masterclass",
   "description": "High-converting portal for King Elidex AI Video Editing Masterclass 2026. Features tiered registration, user status tracking, interactive student portal, and password-protected admin panel.",
-  "requestFramePermissions": [],
+  "requestFramePermissions": ["camera", "microphone"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

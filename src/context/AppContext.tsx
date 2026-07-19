@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import emailjs from '@emailjs/browser';
-import { ApplicationStatus, Applicant, Lesson, Testimonial, SystemStats, AdminUser, AdminNotification } from '../types';
+import { ApplicationStatus, Applicant, Lesson, Testimonial, SystemStats, AdminUser, AdminNotification, LiveStreamInfo } from '../types';
 import { INITIAL_STATS, INITIAL_ADMIN_USERS, INITIAL_TESTIMONIALS, INITIAL_LESSONS, INITIAL_APPLICANTS, INITIAL_NOTIFICATIONS } from '../data';
 
 interface AppContextType {
@@ -56,6 +56,11 @@ interface AppContextType {
 
   // Recording sale action
   purchaseRecording: (email: string, recordingTitle: string) => void;
+
+  // Streaming actions & config
+  liveStream: LiveStreamInfo;
+  updateLiveStream: (config: LiveStreamInfo) => void;
+  signupStreamTicket: (data: { name: string; email: string; phone: string; receiptUrl: string }) => { success: boolean; error?: string };
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -120,6 +125,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [emailLogs, setEmailLogs] = useState<{ id: string; to: string; subject: string; body: string; timestamp: string }[]>(() => {
     const saved = localStorage.getItem('ke_email_logs');
     return saved ? JSON.parse(saved) : [];
+  });
+
+  const [liveStream, setLiveStream] = useState<LiveStreamInfo>(() => {
+    const saved = localStorage.getItem('ke_live_stream');
+    return saved ? JSON.parse(saved) : {
+      title: 'King Elidex AI Video Editing Live Masterclass',
+      description: 'Welcome to the active live streaming session! Learn professional AI-assisted storytelling and mobile video editing strategies in real-time directly from King Elidex.',
+      embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // default demo video / stream placeholder
+      status: 'offline', // default to offline
+      ticketPrice: 1000
+    };
   });
 
   const [emailConfig, setEmailConfig] = useState(() => {
@@ -200,6 +216,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     localStorage.setItem('ke_email_logs', JSON.stringify(emailLogs));
   }, [emailLogs]);
+
+  useEffect(() => {
+    localStorage.setItem('ke_live_stream', JSON.stringify(liveStream));
+  }, [liveStream]);
 
   // Dynamic Phase and Pricing Calculations
   const enrolledApplicants = applicants.filter(a => a.status === ApplicationStatus.ENROLLED);
@@ -983,6 +1003,71 @@ Funds verified and link automatically delivered.
     setNotifications(prev => [newNotif, ...prev]);
   };
 
+  const updateLiveStream = (config: LiveStreamInfo) => {
+    setLiveStream(config);
+  };
+
+  const signupStreamTicket = (data: { name: string; email: string; phone: string; receiptUrl: string }) => {
+    // Check if email already registered
+    const exists = applicants.find(a => a.email.toLowerCase().trim() === data.email.toLowerCase().trim());
+    if (exists) {
+      return { success: false, error: 'This email is already registered. Please check your status or log in to your portal.' };
+    }
+
+    const uniqueId = `STREAM-2026-${1000 + applicants.length + 1}`;
+    const newApplicant: Applicant = {
+      id: uniqueId,
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      location: 'Online Live Stream',
+      referral: 'Live Stream Pass',
+      status: ApplicationStatus.PENDING_TRAINING, // Since they upload the screenshot directly during checkout
+      regReceiptUrl: null,
+      trainingReceiptUrl: data.receiptUrl,
+      adminNotes: 'Stream ticket requested. Paid ₦1,000. Awaiting registration verification.',
+      phaseNum: 1,
+      amountPaid: 1000,
+      isStreamTicketOnly: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    setApplicants(prev => [newApplicant, ...prev]);
+
+    // Send notifications/emails to admins
+    const emailBody = `
+⚠️ NEW LIVE STREAM TICKET REQUEST!
+
+A user has purchased a Live Stream Ticket for ₦1,000 and uploaded their PalmPay payment receipt screenshot.
+
+STUDENT PROFILE:
+- Full Name:    ${data.name}
+- Email:        ${data.email}
+- Phone Number: ${data.phone}
+- Amount Paid:  ₦1,000 (Naira)
+- Ticket Type:  Live Stream Only
+
+Please review and approve their tuition receipt screenshot in the Admin Dashboard to grant access to the Live Room.
+
+— King Elidex System Automated Alert
+    `;
+    alertAdmins(`[STREAM PASS] New ₦1,000 Stream Pass purchase by ${data.name}`, emailBody);
+
+    // Create Admin notification
+    const newNotif: AdminNotification = {
+      id: `notif-${Date.now()}`,
+      title: 'Stream Ticket Purchased',
+      message: `${data.name} paid ₦1,000 for Live Stream Ticket. Awaiting approval.`,
+      timestamp: new Date().toISOString(),
+      isRead: false,
+      link: 'applicants'
+    };
+    setNotifications(prev => [newNotif, ...prev]);
+
+    return { success: true };
+  };
+
   return (
     <AppContext.Provider value={{
       stats,
@@ -1016,7 +1101,10 @@ Funds verified and link automatically delivered.
       updateStats,
       clearAllNotifications,
       markNotificationAsRead,
-      purchaseRecording
+      purchaseRecording,
+      liveStream,
+      updateLiveStream,
+      signupStreamTicket
     }}>
       {children}
     </AppContext.Provider>

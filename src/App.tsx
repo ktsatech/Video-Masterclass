@@ -7,6 +7,7 @@ import RegistrationForm from './components/RegistrationForm';
 import StudentStatus from './components/StudentStatus';
 import StudentPortal from './components/StudentPortal';
 import AdminDashboard from './components/AdminDashboard';
+import LiveStreamGate from './components/LiveStreamGate';
 import KingElidexLogo from './components/KingElidexLogo';
 import { Sparkles, X, User, Shield, Info, ArrowRight } from 'lucide-react';
 
@@ -98,6 +99,8 @@ function AppContent() {
         );
       case '#/portal':
         return <StudentPortal />;
+      case '#/watch':
+        return <LiveStreamGate />;
       case '#/admin':
         return <AdminDashboard />;
       default:

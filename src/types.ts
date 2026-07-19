@@ -24,6 +24,7 @@ export interface Applicant {
   updatedAt: string;
   evaluatedAt?: string;
   enrolledAt?: string;
+  isStreamTicketOnly?: boolean;        // true if they only paid N1,000 for the stream ticket
 }
 
 export interface Lesson {
@@ -73,4 +74,12 @@ export interface AdminNotification {
   timestamp: string;
   isRead: boolean;
   link: string;
+}
+
+export interface LiveStreamInfo {
+  title: string;
+  description: string;
+  embedUrl: string;                     // e.g. "https://www.youtube.com/embed/dQw4w9WgXcQ" or direct link
+  status: 'live' | 'offline' | 'replay';
+  ticketPrice: number;                 // 1000
 }

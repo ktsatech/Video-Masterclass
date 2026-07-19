@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import KingElidexLogo from './KingElidexLogo';
 import { useApp } from '../context/AppContext';
-import { Menu, X, ShieldAlert, Award, UserCheck, GraduationCap } from 'lucide-react';
+import { Menu, X, ShieldAlert, Award, UserCheck, GraduationCap, Video } from 'lucide-react';
 
 interface NavbarProps {
   currentPath: string;
@@ -16,7 +16,7 @@ export default function Navbar({ currentPath, navigate }: NavbarProps) {
     { name: 'Home', path: '#/', icon: GraduationCap },
     { name: 'Check Status', path: '#/status', icon: UserCheck },
     { name: 'Student Portal', path: '#/portal', icon: Award },
-    ...(currentAdmin ? [{ name: 'Admin Panel', path: '#/admin', icon: ShieldAlert }] : []),
+    { name: '🔴 Watch Live', path: '#/watch', icon: Video },
   ];
 
   const handleNavClick = (path: string) => {
